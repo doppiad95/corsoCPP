@@ -14,6 +14,7 @@ logicArray<T>::logicArray()
 template <typename T>
 logicArray<T>::~logicArray()
 {
+	testgit;
 }
 
 // Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine
