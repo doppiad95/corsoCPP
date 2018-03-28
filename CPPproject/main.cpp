@@ -25,5 +25,10 @@ int main()
 	logicarray.sortedPrint();
 	logicarray.unsortedPrint();
 	cout << logicarray(3) << "\n";
-	cout << logicarray[3];
+	cout << logicarray[3] << "\n";
+	logicarray.emptyData();
+	logicarray.insertData(10, ord);
+	logicarray.insertData(2, ord);
+	logicarray.sortedPrint();
+	logicarray.unsortedPrint();
 }
