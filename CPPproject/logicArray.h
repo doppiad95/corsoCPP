@@ -20,10 +20,12 @@ class logicArray
 public:
 	logicArray();
 	logicArray(const maxDimension dimensione);
+	logicArray(const logicArray &other);
 	~logicArray();
 
 	// Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine
-	bool insertData(const T& data);
+	template<typename F>
+	bool insertData(const T& data, F comp);
 
 	// Svuota l'array da tutti i dati. Svuota anche l'array delle posizioni
 	bool emptyData();
@@ -41,5 +43,9 @@ public:
 	bool dispose();
 
 
+	// Shifta a dx di 1 posizione ogni elemento
+	void shiftItem(int position);
+	void sortedPrint();
+	void unsortedPrint();
 };
 
