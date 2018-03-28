@@ -47,5 +47,12 @@ public:
 	void shiftItem(int position);
 	void sortedPrint();
 	void unsortedPrint();
+	logicArray& operator=(const logicArray &other);
+	const T &operator[](const maxDimension index) const;
+	T &operator[](const maxDimension index);
+	const T &operator()(const maxDimension index) const;
+	T &operator()(const maxDimension index);
+	T getUnsortedHead();
+	T getUnsortedTail();
 };
 

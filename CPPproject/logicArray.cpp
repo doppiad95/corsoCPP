@@ -65,7 +65,7 @@ bool logicArray<T>::insertData(const T& data, F comp)
 		int i = 0;
 		for (i = 0; i < lastInserted; i++)
 		{
-			if (!comp(data, unsortedData[sortedData[i]]))
+			if (!comp(data, unsortedData[sortedData[i]]) && !inserito)
 			{
 				shiftItem(i);
 				sortedData[i] = lastInserted;
@@ -74,6 +74,8 @@ bool logicArray<T>::insertData(const T& data, F comp)
 		}
 		if (!inserito)
 			sortedData[i] = lastInserted;
+		_tail = &sortedData[lastInserted];
+		_utail = &unsortedData[lastInserted];
 		lastInserted++;
 	return false;
 }
@@ -166,11 +168,10 @@ template<typename T>
 void logicArray<T>::shiftItem(int position)
 {
 	int temp = sortedData[getDimension() - 1];
-	     for (int i = position; i < getDimension(); i++) {
+	     for (unsigned int i = position; i < getDimension(); i++) {
 	         int temp1 = sortedData[i];
 	         sortedData[i] = temp;
 	         temp = temp1;
-			 cout << sortedData[i] << " ";
 	
 	}
 	 cout << std::endl;
@@ -191,4 +192,50 @@ void logicArray<T>::unsortedPrint()
 	for (int i = 0; i < lastInserted; i++)
 		std::cout << "Posizione:\t" << i << "\tValore:\t" << unsortedData[i]<<"\n";
 
+}
+
+template <typename T>
+logicArray<T>& logicArray<T>::operator=(const logicArray& other)
+{
+	if (this != other)
+	{
+		logicArray tmp(other);
+		this->swap(tmp);
+	}
+	return *this;
+}
+
+template<typename T>
+const T & logicArray<T>::operator[](const maxDimension index) const
+{
+	return unsortedData[sortedData[index]];
+}
+
+template<typename T>
+T & logicArray<T>::operator[](const maxDimension index)
+{
+	return unsortedData[sortedData[index]];
+}
+template<typename T>
+const T & logicArray<T>::operator()(const maxDimension index) const
+{
+	return unsortedData[index];
+}
+
+template<typename T>
+T & logicArray<T>::operator()(const maxDimension index)
+{
+	return unsortedData[index];
+}
+
+template<typename T>
+T logicArray<T>::getUnsortedHead()
+{
+	return _uhead;
+}
+
+template<typename T>
+T logicArray<T>::getUnsortedTail()
+{
+	return _utail;
 }
