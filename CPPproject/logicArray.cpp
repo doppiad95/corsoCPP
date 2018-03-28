@@ -2,19 +2,30 @@
 
 
 template <typename T>
-logicArray<T>::logicArray(const maxDimension dimensione)
+logicArray<T>::logicArray(const maxDimension dimensione) : unsortedData(0), sortedData(0), lastInserted(0),_head(0),_tail(0),_uhead(0),_utail(0),_dimensioneArray(0),logger(Logger::WARNING)
 {
+	_dimensioneArray = dimensione;
+	unsortedData = new T[dimensione];
+	sortedData = new int[dimensione];
+	
+	_head = &sortedData[0];
+	_tail = &sortedData[0];
+
+	_uhead = &unsortedData[0];
+	_utail = &unsortedData[0];
+	
 	lastInserted = 0;
 }
 template <typename T>
-logicArray<T>::logicArray()
+logicArray<T>::logicArray() : unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
 {
-	lastInserted = 0;
+
 }
 template <typename T>
 logicArray<T>::~logicArray()
 {
-	testgit;
+	if (!dispose())
+		logger.log(Logger::ERROR, "Impossibile eseguire il dispose delle risorse. Possibili memory leak");
 }
 
 // Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine
@@ -88,12 +99,19 @@ void logicArray<T>::swap(logicArray& toSwap)
 template<typename T>
 bool logicArray<T>::dispose()
 {
-	logger.log(Logger::WARNING, "Inizio dispose delle risorse");
-	delete[] unsortedData;
-	delete[] sortedData;
-	lastInserted = 0;
-	_head = 0;
-	_tail = 0;
-	_dimensioneArray = 0;
-	logger.log(Logger::WARNING, "Fine dispose delle risorse");
+	try {
+		logger.log(Logger::WARNING, "Inizio dispose delle risorse");
+		delete[] unsortedData;
+		delete[] sortedData;
+		lastInserted = 0;
+		_head = 0;
+		_tail = 0;
+		_dimensioneArray = 0;
+		logger.log(Logger::WARNING, "Fine dispose delle risorse");
+	}
+	catch (...)
+	{
+		return false;
+	}
+		return true;
 }

@@ -5,11 +5,17 @@ class logicArray
 {
 	typedef unsigned int maxDimension;
 	T *unsortedData;
+	int* sortedData;
+
 	int lastInserted;
-	int sortedData[];
+
 	T* _head;
 	T* _tail;
+
+	T* _uhead;
+	T* _utail;
 	maxDimension _dimensioneArray;
+
 	Logger logger;
 public:
 	logicArray();
