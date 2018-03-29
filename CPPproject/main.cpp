@@ -10,8 +10,8 @@ int main()
 	greterInt ord;
 	logicarray.insertData(1, ord);
 	logicarray.insertData(10, ord);
-	logicarray.insertData(2, ord);
 	logicarray.insertData(4, ord);
+	logicarray.insertData(2, ord);
 	logicarray.insertData(7, ord);
 	/*logicarray.sortedPrint();
 	logicarray.unsortedPrint();*/

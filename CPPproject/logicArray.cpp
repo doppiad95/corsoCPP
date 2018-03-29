@@ -1,20 +1,24 @@
 #include "logicArray.h"
 
-
 template <typename T>
-logicArray<T>::logicArray(const maxDimension dimensione) : unsortedData(0), sortedData(0), lastInserted(0),_head(0),_tail(0),_uhead(0),_utail(0),_dimensioneArray(0),logger(Logger::WARNING)
+logicArray<T>::logicArray(const maxDimension dimensione) : unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
 {
-	_dimensioneArray = dimensione;
-	unsortedData = new T[dimensione];
-	sortedData = new int[dimensione];
-	
-	_head = &sortedData[0];
-	_tail = &sortedData[0];
+	try {
+		_dimensioneArray = dimensione;
+		unsortedData = new T[dimensione];
+		sortedData = new int[dimensione];
 
-	_uhead = &unsortedData[0];
-	_utail = &unsortedData[0];
-	
-	lastInserted = 0;
+		_head = &sortedData[0];
+		_tail = &sortedData[0];
+
+		_uhead = &unsortedData[0];
+		_utail = &unsortedData[0];
+
+		lastInserted = 0;
+	}
+	catch (std::exception& e) {
+		std::cerr << "exception caught: " << e.what() << '\n';
+	}
 }
 template<typename T>
 logicArray<T>::logicArray(const logicArray &other) :unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
@@ -37,7 +41,8 @@ logicArray<T>::logicArray(const logicArray &other) :unsortedData(0), sortedData(
 			unsortedData[i] = other.unsortedData[i];
 			sortedData[i] = other.sortedData[i];
 		}
-	}catch(...)
+	}
+	catch (...)
 	{
 		logger.log(Logger::ERROR, "Impossibile usare il copyconstructor");
 		dispose();
@@ -46,7 +51,6 @@ logicArray<T>::logicArray(const logicArray &other) :unsortedData(0), sortedData(
 template <typename T>
 logicArray<T>::logicArray() : unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
 {
-
 }
 template <typename T>
 logicArray<T>::~logicArray()
@@ -60,8 +64,11 @@ template <typename F>
 // Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine
 bool logicArray<T>::insertData(const T& data, F comp)
 {
-	unsortedData[lastInserted] = data;
-	bool inserito = false;
+	if (lastInserted == _dimensioneArray)
+		throw new std::out_of_range("Array pieno, impossibile inserire ulteriori elementi");
+	try {
+		unsortedData[lastInserted] = data;
+		bool inserito = false;
 		int i = 0;
 		for (i = 0; i < lastInserted; i++)
 		{
@@ -77,10 +84,13 @@ bool logicArray<T>::insertData(const T& data, F comp)
 		_tail = &sortedData[lastInserted];
 		_utail = &unsortedData[lastInserted];
 		lastInserted++;
-	return false;
+	}
+	catch (std::exception& e) {
+		std::cerr << "exception caught: " << e.what() << '\n';
+		return false;
+	}
+	return true;
 }
-
-
 
 // Svuota l'array da tutti i dati. Svuota anche l'array delle posizioni
 template<typename T>
@@ -98,9 +108,8 @@ bool logicArray<T>::emptyData()
 	}
 	_tail = _head;
 	logger.log(Logger::INFO, "Fine procedura di svuotamento");
-    return true;
+	return true;
 }
-
 
 // Ritorna la dimensione dell'array
 template<typename T>
@@ -134,12 +143,17 @@ T logicArray<T>::getTail()
 template<typename T>
 void logicArray<T>::swap(logicArray& toSwap)
 {
-	std::swap(toSwap.lastInserted, this->lastInserted);
-	std::swap(toSwap.unsortedData, this->unsortedData);
-	std::swap(toSwap._dimensioneArray, this->_dimensioneArray);
-	std::swap(toSwap._head, this->_head);
-	std::swap(toSwap._tail, this->_tail);
-	std::swap(toSwap.sortedData, this->sortedData);
+	try {
+		std::swap(toSwap.lastInserted, this->lastInserted);
+		std::swap(toSwap.unsortedData, this->unsortedData);
+		std::swap(toSwap._dimensioneArray, this->_dimensioneArray);
+		std::swap(toSwap._head, this->_head);
+		std::swap(toSwap._tail, this->_tail);
+		std::swap(toSwap.sortedData, this->sortedData);
+	}
+	catch (std::exception& e) {
+		std::cerr << "exception caught: " << e.what() << '\n';
+	}
 }
 
 // Dispose di tutte le risorse
@@ -160,7 +174,7 @@ bool logicArray<T>::dispose()
 	{
 		return false;
 	}
-		return true;
+	return true;
 }
 
 // Shifta a dx di 1 posizione ogni elemento
@@ -168,13 +182,12 @@ template<typename T>
 void logicArray<T>::shiftItem(int position)
 {
 	int temp = sortedData[getDimension() - 1];
-	     for (unsigned int i = position; i < getDimension(); i++) {
-	         int temp1 = sortedData[i];
-	         sortedData[i] = temp;
-	         temp = temp1;
-	
+	for (unsigned int i = position; i < getDimension(); i++) {
+		int temp1 = sortedData[i];
+		sortedData[i] = temp;
+		temp = temp1;
 	}
-	 cout << std::endl;
+	cout << std::endl;
 }
 
 template<typename T>
@@ -182,7 +195,7 @@ void logicArray<T>::sortedPrint()
 {
 	std::cout << "SORTED PRINT\n";
 	for (int i = 0; i < lastInserted; i++)
-		std::cout << "Posizione:\t" << i << "\tValore:\t" << unsortedData[sortedData[i]]<<"\n";
+		std::cout << "Posizione:\t" << i << "\tValore:\t" << unsortedData[sortedData[i]] << "\n";
 	std::cout << "---------- END SORTED PRINT-----------------\n";
 }
 
@@ -190,8 +203,7 @@ template<typename T>
 void logicArray<T>::unsortedPrint()
 {
 	for (int i = 0; i < lastInserted; i++)
-		std::cout << "Posizione:\t" << i << "\tValore:\t" << unsortedData[i]<<"\n";
-
+		std::cout << "Posizione:\t" << i << "\tValore:\t" << unsortedData[i] << "\n";
 }
 
 template <typename T>
@@ -238,4 +250,10 @@ template<typename T>
 T logicArray<T>::getUnsortedTail()
 {
 	return _utail;
+}
+template<typename T>
+int logicArray<T>::getLastInserted()
+{
+	// TODO: Aggiungere qui il codice di implementazione.
+	return lastInserted;
 }
