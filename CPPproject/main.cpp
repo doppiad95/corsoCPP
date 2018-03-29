@@ -4,7 +4,14 @@ struct greterInt {
 		return a > b;
 	}
 };
+void genericTest();
+void iteratorTest();
 int main()
+{
+	genericTest();
+	iteratorTest();
+}
+void genericTest()
 {
 	logicArray<int> logicarray(10);
 	greterInt ord;
@@ -31,4 +38,42 @@ int main()
 	logicarray.insertData(2, ord);
 	logicarray.sortedPrint();
 	logicarray.unsortedPrint();
+}
+void iteratorTest()
+{
+	greterInt ord;
+	Logger logger(Logger::ALL);
+	logger.log(Logger::INFO, "-----Test costruzione e stampa buffer costruito con iteratori");
+	logger.log(Logger::INFO, "Su circularbuffer di interi");
+	int a[5] = { 67, 90 ,72, 82, 81 };
+
+	logicArray<int> testbuffer(a, a + 5, 5, ord);
+
+	logger.log(Logger::INFO, "Su circularbuffer di interi in circularbuffer di char");
+	logicArray<char> testbuffer1(a, a + 5, 5, ord);
+
+	cout << testbuffer << std::endl;
+	cout << testbuffer1 << std::endl;
+
+	//assert(testbuffer.get_dimensione() == 5 && testbuffer.get_spazioLibero() == 0);
+	cout << "Size: " << testbuffer.getDimension() << " , spazio libero: " << testbuffer.getFreeSpace() << std::endl;
+
+	//logger.log(Logger::INFO, "Su circularbuffer di stringhe");
+
+	//string s[6] = {
+	//	"aa",
+	//	"bb",
+	//	"cc",
+	//	"dd",
+	//	"ee",
+	//	"ff"
+	//};
+
+	//logicArray<string> testbuffer2(s, s + 6, 6,ord);
+	//cout << testbuffer2 << std::endl;
+	////assert(testbuffer2.get_dimensione() == 6 && testbuffer2.get_spazioLibero() == 0);
+
+	//cout << "Size: " << testbuffer2.getDimension() << " , spazio libero: " << testbuffer2.getFreeSpace() << std::endl;
+	//
+	//circularbuffer<int>::const_iterator p, pe;
 }

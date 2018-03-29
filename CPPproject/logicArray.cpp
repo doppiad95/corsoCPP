@@ -59,6 +59,32 @@ logicArray<T>::~logicArray()
 		logger.log(Logger::ERROR, "Impossibile eseguire il dispose delle risorse. Possibili memory leak");
 }
 
+template<typename T>
+template<typename IterT,typename F>
+logicArray<T>::logicArray(IterT inizio, IterT fine, const maxDimension dimensione,F comp): lastInserted(0)
+{
+	_dimensioneArray = dimensione;
+	unsortedData = new T[dimensione];
+	sortedData = new int[dimensione];
+	try
+	{
+		for (; inizio != fine; ++inizio)
+			insertData(static_cast<T>(*inizio),comp);
+	}
+	catch (std::invalid_argument e)
+	{
+		cout << e.what() << std::endl;
+	}
+	catch (std::out_of_range e)
+	{
+		cout << e.what() << std::endl;
+	}
+	catch (...)
+	{
+		logger.log(Logger::ERROR, "Eccezione sconosciuta sollevata riga 52, cbuffer.h");
+	}
+}
+
 template <typename T>
 template <typename F>
 // Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine
