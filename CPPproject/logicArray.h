@@ -169,10 +169,10 @@ public:
 			*posizionamento = v;
 			return *this;
 		}
-		bool operator< (const iterator& lhs, const iterator& rhs) { return rhs.posizionamento > lhs.posizionamento; }
-		bool operator> (const iterator& lhs, const iterator& rhs) { return rhs.posizionamento < lhs.posizionamento }
-		bool operator<=(const iterator& lhs, const iterator& rhs) { return !(rhs.posizionamento > lhs.posizionamento); }
-		bool operator>=(const iterator& lhs, const iterator& rhs) { return !(rhs.posizionamento < lhs.posizionamento); }
+		bool operator< (const iterator& lhs) { return this.posizionamento > lhs.posizionamento; }
+		bool operator> (const iterator& lhs) { return this.posizionamento < lhs.posizionamento; }
+		bool operator<=(const iterator& lhs) { return !(this.posizionamento > lhs.posizionamento); }
+		bool operator>=(const iterator& lhs) { return !(this.posizionamento < lhs.posizionamento); }
 		friend class const_iterator;
 		/** @brief confronto const */
 		bool operator==(const const_iterator &other) const {
@@ -285,10 +285,10 @@ public:
 		bool operator!=(const const_iterator &other) const {
 			return posizionamento != other.posizionamento;
 		}
-		bool operator< (const iterator& lhs, const iterator& rhs) { return rhs.posizionamento > lhs.posizionamento; }
-		bool operator> (const iterator& lhs, const iterator& rhs) { return rhs.posizionamento < lhs.posizionamento }
-		bool operator<=(const iterator& lhs, const iterator& rhs) { return !(rhs.posizionamento > lhs.posizionamento); }
-		bool operator>=(const iterator& lhs, const iterator& rhs) { return !(rhs.posizionamento < lhs.posizionamento); }
+		bool operator< (const iterator& lhs) { return this.posizionamento > lhs.posizionamento; }
+		bool operator> (const iterator& lhs) { return this.posizionamento < lhs.posizionamento; }
+		bool operator<=(const iterator& lhs) { return !(this.posizionamento > lhs.posizionamento); }
+		bool operator>=(const iterator& lhs) { return !(this.posizionamento < lhs.posizionamento); }
 
 		friend class iterator;
 		/** @brief confronto */
