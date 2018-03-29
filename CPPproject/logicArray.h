@@ -68,4 +68,8 @@ public:
 	const T &operator()(const maxDimension index) const;
 	T &operator()(const maxDimension index);
 	//END OPERATOR OVERLOADING
+
+	//ITERATORI
+
+	//END ITERATORI
 };
