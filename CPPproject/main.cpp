@@ -1,15 +1,39 @@
 #include "logicArray.cpp"
 struct greterInt {
-	bool operator() (const int a,const int b) {
+	bool operator() (const int a, const int b) {
 		return a > b;
 	}
 };
+struct greaterString {
+	bool operator() (const string a, const string b) {
+		return a[0] > b[0];
+	}
+};
+struct complex {
+	int real; ///< coordinata x del punto
+	int imm; ///< coordinata y del punto
+	complex() : real(0), imm(0) {}
+	complex(int xx, int yy) : real(xx), imm(yy) {}
+	bool operator() (const complex a, const complex b) {
+		if (a.real != b.real)
+			return a.real > b.real;
+		else
+			return a.imm > b.imm;
+	}
+};
+std::ostream &operator<<(std::ostream &os, const complex &p) {
+	os << "(" << p.real << ", " << p.imm << "i)";
+
+	return os;
+}
 void genericTest();
+void test_complex();
 void iteratorTest();
 int main()
 {
 	genericTest();
 	iteratorTest();
+	test_complex();
 }
 void genericTest()
 {
@@ -54,26 +78,55 @@ void iteratorTest()
 
 	cout << testbuffer << std::endl;
 	cout << testbuffer1 << std::endl;
-
+	int *p = std::find(a, a + 5, 72);
+	if (p != a + 5)
+		std::cout << "Element found in myints: " << *p << '\n';
+	else
+		std::cout << "Element not found in myints\n";
 	//assert(testbuffer.get_dimensione() == 5 && testbuffer.get_spazioLibero() == 0);
 	cout << "Size: " << testbuffer.getDimension() << " , spazio libero: " << testbuffer.getFreeSpace() << std::endl;
 
-	//logger.log(Logger::INFO, "Su circularbuffer di stringhe");
+	logger.log(Logger::INFO, "Su circularbuffer di stringhe");
 
-	//string s[6] = {
-	//	"aa",
-	//	"bb",
-	//	"cc",
-	//	"dd",
-	//	"ee",
-	//	"ff"
-	//};
+	string s[6] = {
+		"dd",
+		"ee",
+		"ff",
+		"aa",
+		"bb",
+		"cc"
+	};
+	greaterString gs;
+	logicArray<string> testbuffer2(s, s + 6, 6, gs);
+	cout << testbuffer2 << std::endl;
+	//assert(testbuffer2.get_dimensione() == 6 && testbuffer2.get_spazioLibero() == 0);
 
-	//logicArray<string> testbuffer2(s, s + 6, 6,ord);
-	//cout << testbuffer2 << std::endl;
-	////assert(testbuffer2.get_dimensione() == 6 && testbuffer2.get_spazioLibero() == 0);
+	cout << "Size: " << testbuffer2.getDimension() << " , spazio libero: " << testbuffer2.getFreeSpace() << std::endl;
 
-	//cout << "Size: " << testbuffer2.getDimension() << " , spazio libero: " << testbuffer2.getFreeSpace() << std::endl;
-	//
-	//circularbuffer<int>::const_iterator p, pe;
+	logicArray<string>::const_iterator px, pe;
+}
+inline void test_complex() {
+	logicArray<complex> testbuffer(5);
+	Logger logger(Logger::ALL);
+	complex com;
+	logger.log(Logger::INFO, "Insertimento dei seguenti numeri complessi (1,1), (1,2), (2,7), (0,0), (5,4)");
+	testbuffer.insertData(complex(1, 1), com);
+	testbuffer.insertData(complex(1, 2), com);
+	testbuffer.insertData(complex(2, 7), com);
+	testbuffer.insertData(complex(0, 0), com);
+	testbuffer.insertData(complex(5, 4), com);
+
+	logger.log(Logger::INFO, "------ Test stampa con operator <<");
+	cout << testbuffer << std::endl;
+
+	logger.log(Logger::INFO, "------ Test stampa con operator << dopo cancellamento testa");
+	cout << testbuffer << std::endl;
+
+	cout << "Dimensione della lista dopo cancellamento testa: " << testbuffer.getLastInserted() << std::endl;
+
+	complex c[6] = { complex(1,1), complex(2,4), complex(1,5), complex(3,4), complex(6,8), complex(5,2) };
+
+	//	logicArray<complex> testbuffer2(c);
+
+	//	cout << testbuffer2 << std::endl;
 }
