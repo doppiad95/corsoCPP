@@ -11,8 +11,6 @@ template <typename T>
 class logicArray
 {
 	typedef unsigned int maxDimension;
-	T *unsortedData;
-	int* sortedData;
 
 	int lastInserted;
 
@@ -24,6 +22,9 @@ class logicArray
 	maxDimension _dimensioneArray;
 
 	Logger logger;
+protected:
+	T * unsortedData;
+	int* sortedData;
 public:
 	//COSTRUTTORI E DISTRUTTORE
 	logicArray();
@@ -80,118 +81,9 @@ public:
 
 	//ITERATORI
 	class const_iterator;
-	class iterator {
-		T *posizionamento;
-	public:
-		typedef std::random_access_iterator_tag iterator_category;
-		typedef T                         value_type;
-		typedef ptrdiff_t                 difference_type;
-		typedef T*                        pointer;
-		typedef T&                        reference;
-		/** @brief Costruttore Default */
-		iterator() : posizionamento(0)
-		{}
-		/** @brief CopyConstrutor
-		*	@param other iterator copy
-		*  */
-		iterator(const iterator &other) : posizionamento(other.posizionamento), coda(other.coda), testa(other.testa)
-		{
-		}
-		pointer operator->() const {
-			return &(posizionamento->unsortedData[sortedData]);
-		}
-		iterator& operator=(const iterator &other) {
-			posizionamento = other.posizionamento;
-			return *this;
-		}
-		/** @brief Distruttore Default */
-		~iterator() {
-			posizionamento = 0;
-		}
-		/** @brief dereferenziamento */
-		reference operator*() const {
-			return *posizionamento;
-		}
-		/** @brief postincremento*/
-		iterator operator++(int) {
-			iterator tmp(*this);
-			if (posizionamento != coda)
-				++posizionamento;
-			else
-				posizionamento = testa;
-			return tmp;
-		}
-		/** @brief preincremento */
-		iterator& operator++() {
-			++posizionamento;
-			return *this;
-		}
-		/** @brief predecremento */
-		iterator& operator--() {
-			--posizionamento;
-			return *this;
-		}
-		/** @brief postdecremento */
-		iterator operator--(int) {
-			iterator tmp(*this);
-			--posizionamento;
-			return tmp;
-		}
-		/** @brief confronto */
-		bool operator==(const iterator &other) const {
-			return posizionamento == other.posizionamento;
-		}
-		/** @brief diversità */
-		bool operator!=(const iterator &other) const {
-			return posizionamento != other.posizionamento;
-		}
-		/** @brief accesso a indice
-		* @param index indice a cui si vuole accedere
-		*  */
-		iterator& operator[](const int index) {
-			posizionamento = posizionamento + index;
-			return *this;
-		}
-		/** @brief assegnamento
-		*	@param v valore T da assegnare
-		*
-		*/
-		iterator& operator=(T &v) {
-			*posizionamento = v;
-			return *this;
-		}
-		bool operator< (const iterator& lhs) { return this.posizionamento > lhs.posizionamento; }
-		bool operator> (const iterator& lhs) { return this.posizionamento < lhs.posizionamento; }
-		bool operator<=(const iterator& lhs) { return !(this.posizionamento > lhs.posizionamento); }
-		bool operator>=(const iterator& lhs) { return !(this.posizionamento < lhs.posizionamento); }
-		friend class const_iterator;
-		/** @brief confronto const */
-		bool operator==(const const_iterator &other) const {
-			return posizionamento == other->posizionamento;
-		}
-		/** @brief diversità const */
-		bool operator!=(const const_iterator &other) const {
-			return posizionamento != other->posizionamento;
-		}
-
-	private:
-		friend class logicArray;
-		/** @brief Costruttore Default */
-		iterator(T *v) : posizionamento(v) {}
-		/** @brief Costruttore Default con informazioni testa coda*/
-	};
-	/** @brief crea un iteratore con posizionamento in testa */
-	iterator begin() {
-		return iterator(_head);
-	}
-	/** @brief crea un iteratore con posizionamento in coda */
-	iterator end() {
-		return iterator(_tail);
-	}
-
 	class const_iterator {
 		const T *posizionamento;
-
+		const T *data;
 	public:
 		typedef std::random_access_iterator_tag iterator_category;
 		typedef T                         value_type;
@@ -203,18 +95,20 @@ public:
 		/** @brief Copy constructor
 		*	@param other const iterator da assegnare
 		*  */
-		const_iterator(const const_iterator &other) : posizionamento(other.posizionamento), testa(other.testa), coda(other.coda)
+		const_iterator(const const_iterator &other) : posizionamento(other.posizionamento)
 		{};
 		/** @brief Assegnamento
 		*	@param other valore const_iterator da assegnare
 		*  */
 		const_iterator& operator=(const const_iterator &other) {
 			posizionamento = other.posizionamento;
+			data = other.data;
 			return *this;
 		}
 		/** @brief assegnamento da const iterator */
 		const_iterator& operator=(const iterator &other) {
 			posizionamento = other.posizionamento;
+			data = other.data;
 			return *this;
 		}
 		/** @brief distruttore */
@@ -223,7 +117,8 @@ public:
 		};
 		/** @brief dereferenziamento */
 		reference operator*() {
-			return *posizionamento;
+			int index = *posizionamento;
+			return data[index];
 		}
 		// Ritorna il puntatore al dato riferito dall'iteratore
 		pointer operator->() const {
@@ -242,10 +137,7 @@ public:
 		}
 		/** @brief predecremento */
 		const_iterator& operator--() {
-			if (posizionamento != testa)
-				--posizionamento;
-			else
-				posizionamento = coda;
+			--posizionamento;
 			return *this;
 		}
 		/** @brief postdecremento */
@@ -288,23 +180,25 @@ public:
 			this->posizionamento = other.posizionamento;
 		}
 
-	private:
-		friend class circularbuffer;
+	public:
+		friend class logicArray;
 		/** @brief costruttore di default */
 		const_iterator(const T *v) : posizionamento(v) {}
+		const_iterator(const int *v, const T* d) : posizionamento(v), data(d) {
+		}
 		/** @brief costruttore con info su testa e coda */
 	};
 	/**
 	*Ritorna un const iterator che punta a testa e ha info su coda e testa
 	*@brief const iterator su testa */
 	const_iterator begin() const {
-		return const_iterator(_head);
+		return const_iterator(_head, _uhead);
 	}
 	/**
 	*Ritorna un const iterator che punta a coda e ha info su coda e testa
 	*@brief const iterator su coda */
 	const_iterator end() const {
-		return const_iterator(_tail);
+		return const_iterator(_tail, _utail);
 	}
 
 	//END ITERATORI

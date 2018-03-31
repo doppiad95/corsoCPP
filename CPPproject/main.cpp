@@ -29,11 +29,13 @@ std::ostream &operator<<(std::ostream &os, const complex &p) {
 void genericTest();
 void test_complex();
 void iteratorTest();
+void test_inizio_fine();
 int main()
 {
 	genericTest();
 	iteratorTest();
 	test_complex();
+	test_inizio_fine();
 }
 void genericTest()
 {
@@ -126,7 +128,49 @@ inline void test_complex() {
 
 	complex c[6] = { complex(1,1), complex(2,4), complex(1,5), complex(3,4), complex(6,8), complex(5,2) };
 
-	//	logicArray<complex> testbuffer2(c);
+	logicArray<complex> testbuffer2(c, c + 6, 6, com);
 
-	//	cout << testbuffer2 << std::endl;
+	cout << testbuffer2 << std::endl;
+}
+void test_inizio_fine() {
+	Logger logger(Logger::ALL);
+	greterInt ord;
+	logger.log(Logger::INFO, "----- Test scrittura con const_iterator");
+	logicArray<int> testbuffer(5);
+
+	testbuffer.insertData(44, ord);
+	testbuffer.insertData(61, ord);
+	testbuffer.insertData(91, ord);
+	testbuffer.insertData(11, ord);
+	testbuffer.insertData(411, ord);
+
+	logicArray<int>::const_iterator iw = testbuffer.begin();
+
+	logicArray<int>::const_iterator i = testbuffer.begin();
+	logicArray<int>::const_iterator ie = testbuffer.end();
+	cout << std::endl;
+	for (; iw != ie; ++iw) {
+		cout << *iw << "-";
+	}
+
+	cout << *iw << std::endl;
+
+	logger.log(Logger::INFO, " ---- Test lettura/scrittura con iterator");
+
+	/*logicArray<int>::iterator i1 = testbuffer.begin();
+	logicArray<int>::iterator iw1 = testbuffer.begin();
+	const logicArray<int>::iterator ie1 = testbuffer.end();
+
+	logger.log(Logger::INFO, "La sequenza era 4,6,9,1,41. Provo a modificare 91 con 5, poi stampo");
+
+	++iw1;
+	++iw1;
+	int a = 5;
+	iw1[0] = a;
+
+	for (; i1 != ie1; ++i1) {
+		cout << *i1 << " ";
+	}
+
+	cout << *i1 << std::endl;*/
 }

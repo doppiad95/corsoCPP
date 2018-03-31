@@ -60,8 +60,8 @@ logicArray<T>::~logicArray()
 }
 
 template<typename T>
-template<typename IterT,typename F>
-logicArray<T>::logicArray(IterT inizio, IterT fine, const maxDimension dimensione,F comp): lastInserted(0)
+template<typename IterT, typename F>
+logicArray<T>::logicArray(IterT inizio, IterT fine, const maxDimension dimensione, F comp) : lastInserted(0)
 {
 	_dimensioneArray = dimensione;
 	unsortedData = new T[dimensione];
@@ -69,7 +69,7 @@ logicArray<T>::logicArray(IterT inizio, IterT fine, const maxDimension dimension
 	try
 	{
 		for (; inizio != fine; ++inizio)
-			insertData(static_cast<T>(*inizio),comp);
+			insertData(static_cast<T>(*inizio), comp);
 	}
 	catch (std::invalid_argument e)
 	{
@@ -228,8 +228,10 @@ void logicArray<T>::sortedPrint()
 template<typename T>
 void logicArray<T>::unsortedPrint()
 {
+	std::cout << "----------- UNSORTED PRINT ------------\n";
 	for (int i = 0; i < lastInserted; i++)
 		std::cout << "Posizione:\t" << i << "\tValore:\t" << unsortedData[i] << "\n";
+	std::cout << "---------- END UNSORTED PRINT-----------------\n";
 }
 
 template <typename T>
