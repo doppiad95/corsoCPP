@@ -162,15 +162,15 @@ public:
 
 		friend class iterator;
 		/** @brief confronto */
-		bool operator==(const iterator &other) const {
+		bool operator==(const const_iterator &other) const {
 			return posizionamento == other.posizionamento;
 		}
 		/** @brief diversità */
-		bool operator!=(const iterator &other) const {
+		bool operator!=(const const_iterator &other) const {
 			return posizionamento != other.posizionamento;
 		}
 		/** @brief copycostruttore con iterator */
-		const_iterator(const iterator &other) {
+		const_iterator(const const_iterator &other) {
 			this->posizionamento = other.posizionamento;
 		}
 
