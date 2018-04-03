@@ -105,12 +105,6 @@ public:
 			data = other.data;
 			return *this;
 		}
-		/** @brief assegnamento da const iterator */
-		const_iterator& operator=(const iterator &other) {
-			posizionamento = other.posizionamento;
-			data = other.data;
-			return *this;
-		}
 		/** @brief distruttore */
 		~const_iterator() {
 			posizionamento = 0;
@@ -161,10 +155,10 @@ public:
 		bool operator!=(const const_iterator &other) const {
 			return posizionamento != other.posizionamento;
 		}
-		bool operator< (const iterator& lhs) { return this.posizionamento > lhs.posizionamento; }
-		bool operator> (const iterator& lhs) { return this.posizionamento < lhs.posizionamento; }
-		bool operator<=(const iterator& lhs) { return !(this.posizionamento > lhs.posizionamento); }
-		bool operator>=(const iterator& lhs) { return !(this.posizionamento < lhs.posizionamento); }
+		bool operator< (const const_iterator& lhs) { return this.posizionamento > lhs.posizionamento; };
+		bool operator> (const const_iterator& lhs) { return this.posizionamento < lhs.posizionamento; };
+		bool operator<=(const const_iterator& lhs) { return !(this.posizionamento > lhs.posizionamento); }
+		bool operator>=(const const_iterator& lhs) { return !(this.posizionamento < lhs.posizionamento); }
 
 		friend class iterator;
 		/** @brief confronto */
