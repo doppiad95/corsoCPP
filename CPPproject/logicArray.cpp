@@ -35,7 +35,7 @@ logicArray<T, F>::logicArray(const logicArray &other) :unsortedData(0), sortedDa
 	_utail = other._utail;
 
 	_dimensioneArray = other._dimensioneArray;
-	_func = other._func;
+	comp = other.comp;
 	try {
 		for (int i = 0; i < _dimensioneArray; i++)
 		{

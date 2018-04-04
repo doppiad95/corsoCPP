@@ -217,7 +217,7 @@ void test_iteratori() {
 	std::cout << *ir << std::endl;
 	std::cout << *(ir += 2) << std::endl;
 	std::cout << *(ir - 1) << std::endl;
-	std::cout << ir[3] << std::endl;
+	//std::cout << ir[3] << std::endl;
 
 	for (; ib != ie; ++ib) {
 		std::cout << *ib << " ";
