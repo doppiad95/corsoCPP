@@ -1,7 +1,7 @@
 #include "logicArray.h"
 
-template <typename T>
-logicArray<T>::logicArray(const maxDimension dimensione) : unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
+template <typename T, typename F>
+logicArray<T,F>::logicArray(const maxDimension dimensione) : unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
 {
 	try {
 		_dimensioneArray = dimensione;
@@ -20,8 +20,8 @@ logicArray<T>::logicArray(const maxDimension dimensione) : unsortedData(0), sort
 		std::cerr << "exception caught: " << e.what() << '\n';
 	}
 }
-template<typename T>
-logicArray<T>::logicArray(const logicArray &other) :unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
+template <typename T, typename F>
+logicArray<T, F>::logicArray(const logicArray &other) :unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
 {
 	unsortedData = new T[other._dimensioneArray];
 	sortedData = new int[other._dimensioneArray];
@@ -35,6 +35,7 @@ logicArray<T>::logicArray(const logicArray &other) :unsortedData(0), sortedData(
 	_utail = other._utail;
 
 	_dimensioneArray = other._dimensioneArray;
+	_func = other._func;
 	try {
 		for (int i = 0; i < _dimensioneArray; i++)
 		{
@@ -48,20 +49,22 @@ logicArray<T>::logicArray(const logicArray &other) :unsortedData(0), sortedData(
 		dispose();
 	}
 }
-template <typename T>
-logicArray<T>::logicArray() : unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
+
+
+
+template <typename T, typename F>
+logicArray<T, F>::logicArray() : unsortedData(0), sortedData(0), lastInserted(0), _head(0), _tail(0), _uhead(0), _utail(0), _dimensioneArray(0), logger(Logger::WARNING)
 {
 }
-template <typename T>
-logicArray<T>::~logicArray()
+template <typename T, typename F>
+logicArray<T, F>::~logicArray()
 {
 	if (!dispose())
 		logger.log(Logger::ERROR, "Impossibile eseguire il dispose delle risorse. Possibili memory leak");
 }
-
-template<typename T>
-template<typename IterT, typename F>
-logicArray<T>::logicArray(IterT inizio, IterT fine, const maxDimension dimensione, F comp) : lastInserted(0)
+template<typename T, typename F>
+template<typename  IterT>
+logicArray<T,F>::logicArray(IterT inizio, IterT fine, const maxDimension dimensione, F comp) : lastInserted(0)
 {
 	_dimensioneArray = dimensione;
 	unsortedData = new T[dimensione];
@@ -69,7 +72,7 @@ logicArray<T>::logicArray(IterT inizio, IterT fine, const maxDimension dimension
 	try
 	{
 		for (; inizio != fine; ++inizio)
-			insertData(static_cast<T>(*inizio), comp);
+			insertData(static_cast<T>(*inizio));
 	}
 	catch (std::invalid_argument e)
 	{
@@ -85,10 +88,9 @@ logicArray<T>::logicArray(IterT inizio, IterT fine, const maxDimension dimension
 	}
 }
 
-template <typename T>
-template <typename F>
+template <typename T,typename F>
 // Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine
-bool logicArray<T>::insertData(const T& data, F comp)
+bool logicArray<T,F>::insertData(const T& data)
 {
 	if (lastInserted == _dimensioneArray)
 		throw new std::out_of_range("Array pieno, impossibile inserire ulteriori elementi");
@@ -119,8 +121,8 @@ bool logicArray<T>::insertData(const T& data, F comp)
 }
 
 // Svuota l'array da tutti i dati. Svuota anche l'array delle posizioni
-template<typename T>
-bool logicArray<T>::emptyData()
+template<typename T,typename  F>
+bool logicArray<T,F>::emptyData()
 {
 	logger.log(Logger::INFO, "Inizio procedura di svuotamento");
 	lastInserted = 0;
@@ -138,36 +140,36 @@ bool logicArray<T>::emptyData()
 }
 
 // Ritorna la dimensione dell'array
-template<typename T>
-unsigned int logicArray<T>::getDimension()
+template<typename T, typename  F >
+unsigned int logicArray<T,F>::getDimension() const
 {
 	return this->_dimensioneArray;
 }
 
 // Restituisce il numero di posizioni ancora libere
-template<typename T>
-int logicArray<T>::getFreeSpace()
+template<typename T, typename  F >
+int logicArray<T,F>::getFreeSpace()
 {
 	return this->_dimensioneArray - this->lastInserted > 0 ? this->_dimensioneArray - this->lastInserted : 0;
 }
 
 // Ritorna l'elemento in testa
-template<typename T>
-T logicArray<T>::getHead()
+template<typename T, typename  F>
+T logicArray<T,F>::getHead()
 {
 	return this->_head;
 }
 
 // Ritorna l'elemento in coda
-template<typename T>
-T logicArray<T>::getTail()
+template<typename T, typename  F>
+T logicArray<T,F>::getTail()
 {
 	return this->_tail;
 }
 
 // Metodo ausiliario utilizzato nell'operatore assegnamento
-template<typename T>
-void logicArray<T>::swap(logicArray& toSwap)
+template<typename T, typename  F >
+void logicArray<T,F>::swap(logicArray& toSwap)
 {
 	try {
 		std::swap(toSwap.lastInserted, this->lastInserted);
@@ -183,8 +185,8 @@ void logicArray<T>::swap(logicArray& toSwap)
 }
 
 // Dispose di tutte le risorse
-template<typename T>
-bool logicArray<T>::dispose()
+template<typename T, typename  F>
+bool logicArray<T,F>::dispose()
 {
 	try {
 		logger.log(Logger::WARNING, "Inizio dispose delle risorse");
@@ -204,8 +206,8 @@ bool logicArray<T>::dispose()
 }
 
 // Shifta a dx di 1 posizione ogni elemento
-template<typename T>
-void logicArray<T>::shiftItem(int position)
+template<typename T, typename  F >
+void logicArray<T,F>::shiftItem(int position)
 {
 	int temp = sortedData[getDimension() - 1];
 	for (unsigned int i = position; i < getDimension(); i++) {
@@ -216,8 +218,8 @@ void logicArray<T>::shiftItem(int position)
 	cout << std::endl;
 }
 
-template<typename T>
-void logicArray<T>::sortedPrint()
+template<typename T, typename  F>
+void logicArray<T,F>::sortedPrint()
 {
 	std::cout << "SORTED PRINT\n";
 	for (int i = 0; i < lastInserted; i++)
@@ -225,8 +227,8 @@ void logicArray<T>::sortedPrint()
 	std::cout << "---------- END SORTED PRINT-----------------\n";
 }
 
-template<typename T>
-void logicArray<T>::unsortedPrint()
+template<typename T, typename  F>
+void logicArray<T,F>::unsortedPrint()
 {
 	std::cout << "----------- UNSORTED PRINT ------------\n";
 	for (int i = 0; i < lastInserted; i++)
@@ -234,8 +236,8 @@ void logicArray<T>::unsortedPrint()
 	std::cout << "---------- END UNSORTED PRINT-----------------\n";
 }
 
-template <typename T>
-logicArray<T>& logicArray<T>::operator=(const logicArray& other)
+template <typename T, typename  F>
+logicArray<T,F>& logicArray<T,F>::operator=(const logicArray& other)
 {
 	if (this != other)
 	{
@@ -245,43 +247,42 @@ logicArray<T>& logicArray<T>::operator=(const logicArray& other)
 	return *this;
 }
 
-template<typename T>
-const T & logicArray<T>::operator[](const maxDimension index) const
+template<typename T, typename  F>
+const T & logicArray<T,F>::operator[](const maxDimension index) const
 {
 	return unsortedData[sortedData[index]];
 }
 
-template<typename T>
-T & logicArray<T>::operator[](const maxDimension index)
+template<typename T, typename  F >
+T & logicArray<T,F>::operator[](const maxDimension index)
 {
 	return unsortedData[sortedData[index]];
 }
-template<typename T>
-const T & logicArray<T>::operator()(const maxDimension index) const
+template<typename T, typename  F>
+const T & logicArray<T,F>::operator()(const maxDimension index) const
 {
 	return unsortedData[index];
 }
 
-template<typename T>
-T & logicArray<T>::operator()(const maxDimension index)
+template<typename T, typename  F>
+T & logicArray<T,F>::operator()(const maxDimension index)
 {
 	return unsortedData[index];
 }
 
-template<typename T>
-T logicArray<T>::getUnsortedHead()
+template<typename T, typename  F>
+T logicArray<T,F>::getUnsortedHead()
 {
 	return _uhead;
 }
 
-template<typename T>
-T logicArray<T>::getUnsortedTail()
+template<typename T, typename  F>
+T logicArray<T,F>::getUnsortedTail()
 {
 	return _utail;
 }
-template<typename T>
-int logicArray<T>::getLastInserted()
+template<typename T, typename  F>
+int logicArray<T,F>::getLastInserted() const
 {
-	// TODO: Aggiungere qui il codice di implementazione.
 	return lastInserted;
 }

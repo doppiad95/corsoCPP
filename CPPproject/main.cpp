@@ -30,38 +30,43 @@ void genericTest();
 void test_complex();
 void iteratorTest();
 void test_inizio_fine();
+void test_count();
+void test_iteratori2();
+void test_iteratori();
 int main()
 {
 	genericTest();
 	iteratorTest();
 	test_complex();
 	test_inizio_fine();
+	test_count();
+	test_iteratori2();
+	test_iteratori();
 }
 void genericTest()
 {
-	logicArray<int> logicarray(10);
-	greterInt ord;
-	logicarray.insertData(1, ord);
-	logicarray.insertData(10, ord);
-	logicarray.insertData(4, ord);
-	logicarray.insertData(2, ord);
-	logicarray.insertData(7, ord);
+	logicArray<int,greterInt> logicarray(10);
+	logicarray.insertData(1);
+	logicarray.insertData(10);
+	logicarray.insertData(4);
+	logicarray.insertData(2);
+	logicarray.insertData(7);
 	/*logicarray.sortedPrint();
 	logicarray.unsortedPrint();*/
-	logicarray.insertData(1, ord);
+	logicarray.insertData(1);
 	//logicarray.sortedPrint();
 	//logicarray.unsortedPrint();
-	logicarray.insertData(6, ord);
-	logicarray.insertData(3, ord);
-	logicarray.insertData(11, ord);
-	logicarray.insertData(0, ord);
+	logicarray.insertData(6);
+	logicarray.insertData(3);
+	logicarray.insertData(11);
+	logicarray.insertData(0);
 	logicarray.sortedPrint();
 	logicarray.unsortedPrint();
 	cout << logicarray(3) << "\n";
 	cout << logicarray[3] << "\n";
 	logicarray.emptyData();
-	logicarray.insertData(10, ord);
-	logicarray.insertData(2, ord);
+	logicarray.insertData(10);
+	logicarray.insertData(2);
 	logicarray.sortedPrint();
 	logicarray.unsortedPrint();
 }
@@ -73,15 +78,15 @@ void iteratorTest()
 	logger.log(Logger::INFO, "Su circularbuffer di interi");
 	int a[5] = { 67, 90 ,72, 82, 81 };
 
-	logicArray<int> testbuffer(a, a + 5, 5, ord);
+	logicArray<int,greterInt> testbuffer(a, a + 5, 5, ord);
 
 	logger.log(Logger::INFO, "Su circularbuffer di interi in circularbuffer di char");
-	logicArray<char> testbuffer1(a, a + 5, 5, ord);
+	logicArray<char,greterInt> testbuffer1(a, a + 5, 5, ord);
 
 	cout << testbuffer << std::endl;
 	cout << testbuffer1 << std::endl;
 	int *p = std::find(a, a + 5, 72);
-	if (p != a + 5)
+	if (p <= a + 5)
 		std::cout << "Element found in myints: " << *p << '\n';
 	else
 		std::cout << "Element not found in myints\n";
@@ -99,24 +104,24 @@ void iteratorTest()
 		"cc"
 	};
 	greaterString gs;
-	logicArray<string> testbuffer2(s, s + 6, 6, gs);
+	logicArray<string,greaterString> testbuffer2(s, s + 6, 6, gs);
 	cout << testbuffer2 << std::endl;
 	//assert(testbuffer2.get_dimensione() == 6 && testbuffer2.get_spazioLibero() == 0);
 
 	cout << "Size: " << testbuffer2.getDimension() << " , spazio libero: " << testbuffer2.getFreeSpace() << std::endl;
 
-	logicArray<string>::const_iterator px, pe;
+	logicArray<string,greaterString>::const_iterator px, pe;
 }
 inline void test_complex() {
-	logicArray<complex> testbuffer(5);
-	Logger logger(Logger::ALL);
 	complex com;
+	logicArray<complex,complex> testbuffer(5);
+	Logger logger(Logger::ALL);
 	logger.log(Logger::INFO, "Insertimento dei seguenti numeri complessi (1,1), (1,2), (2,7), (0,0), (5,4)");
-	testbuffer.insertData(complex(1, 1), com);
-	testbuffer.insertData(complex(1, 2), com);
-	testbuffer.insertData(complex(2, 7), com);
-	testbuffer.insertData(complex(0, 0), com);
-	testbuffer.insertData(complex(5, 4), com);
+	testbuffer.insertData(complex(1, 1));
+	testbuffer.insertData(complex(1, 2));
+	testbuffer.insertData(complex(2, 7));
+	testbuffer.insertData(complex(0, 0));
+	testbuffer.insertData(complex(5, 4));
 
 	logger.log(Logger::INFO, "------ Test stampa con operator <<");
 	cout << testbuffer << std::endl;
@@ -126,37 +131,34 @@ inline void test_complex() {
 
 	cout << "Dimensione della lista dopo cancellamento testa: " << testbuffer.getLastInserted() << std::endl;
 
-	complex c[6] = { complex(1,1), complex(2,4), complex(1,5), complex(3,4), complex(6,8), complex(5,2) };
-
-	logicArray<complex> testbuffer2(c, c + 6, 6, com);
-
-	cout << testbuffer2 << std::endl;
 }
 void test_inizio_fine() {
 	Logger logger(Logger::ALL);
-	greterInt ord;
 	logger.log(Logger::INFO, "----- Test scrittura con const_iterator");
-	logicArray<int> testbuffer(5);
+	logicArray<int,greterInt> testbuffer(5);
+	greterInt g;
+	testbuffer.insertData(44);
+	testbuffer.insertData(61);
+	testbuffer.insertData(91);
+	testbuffer.insertData(11);
+	testbuffer.insertData(411);
+	logicArray<int,greterInt>::const_iterator iw = testbuffer.begin();
 
-	testbuffer.insertData(44, ord);
-	testbuffer.insertData(61, ord);
-	testbuffer.insertData(91, ord);
-	testbuffer.insertData(11, ord);
-	testbuffer.insertData(411, ord);
-
-	logicArray<int>::const_iterator iw = testbuffer.begin();
-
-	logicArray<int>::const_iterator i = testbuffer.begin();
-	logicArray<int>::const_iterator ie = testbuffer.end();
+	logicArray<int,greterInt>::const_iterator i = testbuffer.begin();
+	logicArray<int,greterInt>::const_iterator ie = testbuffer.end();
 	cout << std::endl;
-	for (; iw != ie; ++iw) {
+	for (; iw != ie; iw++) {
 		cout << *iw << "-";
 	}
 
-	cout << *iw << std::endl;
-
 	logger.log(Logger::INFO, " ---- Test lettura/scrittura con iterator");
 
+	logicArray<int, greterInt>::unsorted_const_iterator ui = testbuffer.u_begin();
+	logicArray<int, greterInt>::unsorted_const_iterator uie = testbuffer.u_end();
+	cout << "Unsorted" << std::endl;
+	for (; ui != uie; ui++) {
+		cout << *ui << "-";
+	}
 	/*logicArray<int>::iterator i1 = testbuffer.begin();
 	logicArray<int>::iterator iw1 = testbuffer.begin();
 	const logicArray<int>::iterator ie1 = testbuffer.end();
@@ -173,4 +175,87 @@ void test_inizio_fine() {
 	}
 
 	cout << *i1 << std::endl;*/
+}
+struct equal {
+	bool operator() (const int a, const int b) {
+		return a == b;
+	}
+};
+
+void test_count() {
+	std::cout << "Test sul metodo test_count()" << std::endl;
+	equal func;
+	logicArray<int,greterInt> a(5);
+	a.insertData(2);
+	a.insertData(1);
+	a.insertData(2);
+	a.insertData(3);
+	a.insertData(2);
+
+	std::cout << find_count(a, func, 2) << std::endl;
+
+}
+void test_iteratori() {
+	logicArray<int, greterInt>::unsorted_const_iterator ib, ie, iw, ir, is;
+
+	logicArray<int, greterInt> a(5);
+
+	a.insertData(5);
+	a.insertData(1);
+	a.insertData(-2);
+	a.insertData(3);
+	a.insertData(4);
+
+	ib = a.u_begin();
+	ie = a.u_end();
+
+	iw = ib;
+	ir = ib;
+
+
+
+	std::cout << *ir << std::endl;
+	std::cout << *(ir += 2) << std::endl;
+	std::cout << *(ir - 1) << std::endl;
+	std::cout << ir[3] << std::endl;
+
+	for (; ib != ie; ++ib) {
+		std::cout << *ib << " ";
+	}
+
+	std::cout << std::endl;
+}
+
+//8
+
+void test_iteratori2() {
+	logicArray<int, greterInt>::const_iterator ib, ie, iw, ir, is;
+
+	logicArray<int, greterInt> a(5);
+
+	a.insertData(5);
+	a.insertData(1);
+	a.insertData(-2);
+	a.insertData(3);
+	a.insertData(4);
+
+	ib = a.begin();
+	ie = a.end();
+
+	iw = ib;
+	ir = ib;
+	iw++;
+	iw++;
+
+	is = iw;
+
+	//std::cout << *(is + 1) << std::endl;
+	std::cout << (ib > ie) << std::endl;
+	std::cout << (ib >= ie) << std::endl;
+	std::cout << (ib < ie) << std::endl;
+	std::cout << (ib <= ie) << std::endl;
+
+
+
+
 }
