@@ -1,5 +1,4 @@
 #include "logicArray.h"
-// ReSharper disable CppZeroConstantCanBeReplacedWithNullptr
 template <typename T, typename F>
 logicArray<T,F>::logicArray(const maxDimension dimensione) : last_inserted_(0), head_(0), tail_(0), uhead_(0), utail_(0), dimensione_array_(0), logger_(Logger::WARNING), unsorted_data_(0), sorted_data_(0)
 {
@@ -297,4 +296,3 @@ int logicArray<T,F>::getLastInserted() const
 {
 	return last_inserted_;
 }
-// ReSharper restore CppZeroConstantCanBeReplacedWithNullptr
