@@ -1,11 +1,15 @@
 #include "logicArray.cpp"
+#include <algorithm>
+
 struct greterInt {
-	bool operator() (const int a, const int b) {
+	bool operator() (const int a, const int b) const
+	{
 		return a > b;
 	}
 };
 struct greaterString {
-	bool operator() (const string a, const string b) {
+	bool operator() (const string& a, const string& b) const
+	{
 		return a[0] > b[0];
 	}
 };
@@ -14,7 +18,8 @@ struct complex {
 	int imm; ///< coordinata y del punto
 	complex() : real(0), imm(0) {}
 	complex(int xx, int yy) : real(xx), imm(yy) {}
-	bool operator() (const complex a, const complex b) {
+	bool operator() (const complex a, const complex b) const
+	{
 		if (a.real != b.real)
 			return a.real > b.real;
 		else
@@ -33,6 +38,7 @@ void test_inizio_fine();
 void test_count();
 void test_iteratori2();
 void test_iteratori();
+void test_iteratori3();
 int main()
 {
 	genericTest();
@@ -42,6 +48,7 @@ int main()
 	test_count();
 	test_iteratori2();
 	test_iteratori();
+	test_iteratori3();
 }
 void genericTest()
 {
@@ -72,15 +79,15 @@ void genericTest()
 }
 void iteratorTest()
 {
-	greterInt ord;
+	const greterInt ord;
 	Logger logger(Logger::ALL);
 	logger.log(Logger::INFO, "-----Test costruzione e stampa buffer costruito con iteratori");
-	logger.log(Logger::INFO, "Su circularbuffer di interi");
+	logger.log(Logger::INFO, "Su logicArray di interi");
 	int a[5] = { 67, 90 ,72, 82, 81 };
 
 	logicArray<int,greterInt> testbuffer(a, a + 5, 5, ord);
 
-	logger.log(Logger::INFO, "Su circularbuffer di interi in circularbuffer di char");
+	logger.log(Logger::INFO, "Su logicArray di interi in circularbuffer di char");
 	logicArray<char,greterInt> testbuffer1(a, a + 5, 5, ord);
 
 	cout << testbuffer << std::endl;
@@ -88,6 +95,21 @@ void iteratorTest()
 	int *p = std::find(a, a + 5, 72);
 	if (p <= a + 5)
 		std::cout << "Element found in myints: " << *p << '\n';
+	else
+		std::cout << "Element not found in myints\n";
+	logicArray<int, greterInt>::u_const_iterator inizio = testbuffer.u_begin();
+	logicArray<int, greterInt>::u_const_iterator fine = testbuffer.u_end();
+	logicArray<int, greterInt>::u_const_iterator ppp = std::find(inizio,fine , 72);
+	if (ppp <= testbuffer.u_end())
+		std::cout << "Element found in myints: " << *ppp << '\n';
+	else
+		std::cout << "Element not found in myints\n";
+
+	logicArray<int, greterInt>::const_iterator sinizio = testbuffer.begin();
+	logicArray<int, greterInt>::const_iterator sfine = testbuffer.end();
+	logicArray<int, greterInt>::const_iterator sppp = std::max_element(sinizio, sfine);
+	if (sppp <= testbuffer.end())
+		std::cout << "Element found in myints: " << *sppp << '\n';
 	else
 		std::cout << "Element not found in myints\n";
 	//assert(testbuffer.get_dimensione() == 5 && testbuffer.get_spazioLibero() == 0);
@@ -107,7 +129,8 @@ void iteratorTest()
 	logicArray<string,greaterString> testbuffer2(s, s + 6, 6, gs);
 	cout << testbuffer2 << std::endl;
 	//assert(testbuffer2.get_dimensione() == 6 && testbuffer2.get_spazioLibero() == 0);
-
+	testbuffer2.unsortedPrint();
+	testbuffer2.sortedPrint();
 	cout << "Size: " << testbuffer2.getDimension() << " , spazio libero: " << testbuffer2.getFreeSpace() << std::endl;
 
 	logicArray<string,greaterString>::const_iterator px, pe;
@@ -153,31 +176,17 @@ void test_inizio_fine() {
 
 	logger.log(Logger::INFO, " ---- Test lettura/scrittura con iterator");
 
-	logicArray<int, greterInt>::unsorted_const_iterator ui = testbuffer.u_begin();
-	logicArray<int, greterInt>::unsorted_const_iterator uie = testbuffer.u_end();
+	logicArray<int, greterInt>::u_const_iterator ui = testbuffer.u_begin();
+	logicArray<int, greterInt>::u_const_iterator uie = testbuffer.u_end();
 	cout << "Unsorted" << std::endl;
 	for (; ui != uie; ui++) {
 		cout << *ui << "-";
 	}
-	/*logicArray<int>::iterator i1 = testbuffer.begin();
-	logicArray<int>::iterator iw1 = testbuffer.begin();
-	const logicArray<int>::iterator ie1 = testbuffer.end();
 
-	logger.log(Logger::INFO, "La sequenza era 4,6,9,1,41. Provo a modificare 91 con 5, poi stampo");
-
-	++iw1;
-	++iw1;
-	int a = 5;
-	iw1[0] = a;
-
-	for (; i1 != ie1; ++i1) {
-		cout << *i1 << " ";
-	}
-
-	cout << *i1 << std::endl;*/
 }
 struct equal {
-	bool operator() (const int a, const int b) {
+	bool operator() (const int a, const int b) const
+	{
 		return a == b;
 	}
 };
@@ -196,7 +205,7 @@ void test_count() {
 
 }
 void test_iteratori() {
-	logicArray<int, greterInt>::unsorted_const_iterator ib, ie, iw, ir, is;
+	logicArray<int, greterInt>::u_const_iterator is;
 
 	logicArray<int, greterInt> a(5);
 
@@ -206,11 +215,11 @@ void test_iteratori() {
 	a.insertData(3);
 	a.insertData(4);
 
-	ib = a.u_begin();
-	ie = a.u_end();
+	logicArray<int, greterInt>::u_const_iterator ib = a.u_begin();
+	logicArray<int, greterInt>::u_const_iterator ie = a.u_end();
 
-	iw = ib;
-	ir = ib;
+	logicArray<int, greterInt>::u_const_iterator iw = ib;
+	logicArray<int, greterInt>::u_const_iterator ir = ib;
 
 
 
@@ -229,8 +238,6 @@ void test_iteratori() {
 //8
 
 void test_iteratori2() {
-	logicArray<int, greterInt>::const_iterator ib, ie, iw, ir, is;
-
 	logicArray<int, greterInt> a(5);
 
 	a.insertData(5);
@@ -239,23 +246,46 @@ void test_iteratori2() {
 	a.insertData(3);
 	a.insertData(4);
 
-	ib = a.begin();
-	ie = a.end();
+	logicArray<int, greterInt>::const_iterator ib = a.begin();
+	logicArray<int, greterInt>::const_iterator ie = a.end();
 
-	iw = ib;
-	ir = ib;
-	iw++;
-	iw++;
+	logicArray<int, greterInt>::const_iterator iw = ib;
+	logicArray<int, greterInt>::const_iterator ir = ib;
+	++iw;
+	++iw;
 
-	is = iw;
+	logicArray<int, greterInt>::const_iterator is = iw;
 
-	//std::cout << *(is + 1) << std::endl;
+	std::cout << *(iw-2) << std::endl;
 	std::cout << (ib > ie) << std::endl;
 	std::cout << (ib >= ie) << std::endl;
 	std::cout << (ib < ie) << std::endl;
 	std::cout << (ib <= ie) << std::endl;
 
+}
+void test_iteratori3()
+{
+	logicArray<int, greterInt> a(5);
 
+	a.insertData(5);
+	a.insertData(1);
+	a.insertData(-2);
+	a.insertData(3);
+	a.insertData(4);
 
+	logicArray<int, greterInt>::u_const_iterator ib = a.u_begin();
+	logicArray<int, greterInt>::u_const_iterator ie = a.u_end();
 
+	logicArray<int, greterInt>::u_const_iterator iw = ib;
+	logicArray<int, greterInt>::u_const_iterator ir = ib;
+	++iw;
+	++iw;
+
+	logicArray<int, greterInt>::u_const_iterator is = iw;
+
+	std::cout << *(iw - 2) << std::endl;
+	std::cout << (ib > ie) << std::endl;
+	std::cout << (ib >= ie) << std::endl;
+	std::cout << (ib < ie) << std::endl;
+	std::cout << (ib <= ie) << std::endl;
 }

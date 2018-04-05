@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 
@@ -58,7 +59,7 @@ public:
 	* 	@brief Crea riga di log
 	*
 	**/
-	void log(const LogLevel level, const string message) const
+	void log(const LogLevel level, const string& message) const
 	{
 		if (Errorlevel <= level)
 		{
