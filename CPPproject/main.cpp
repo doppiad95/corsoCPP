@@ -1,4 +1,4 @@
-#include "logicArray.cpp"
+#include "logicArray.h"
 #include <algorithm>
 
 struct greterInt {
@@ -52,7 +52,8 @@ int main()
 }
 void genericTest()
 {
-	logicArray<int,greterInt> logicarray(10);
+	logicArray<int,greterInt> logicarray(5);
+	try{
 	logicarray.insertData(1);
 	logicarray.insertData(10);
 	logicarray.insertData(4);
@@ -67,6 +68,10 @@ void genericTest()
 	logicarray.insertData(3);
 	logicarray.insertData(11);
 	logicarray.insertData(0);
+	}catch(...)
+	{
+		
+	}
 	logicarray.sortedPrint();
 	logicarray.unsortedPrint();
 	cout << logicarray(3) << "\n";
@@ -87,7 +92,7 @@ void iteratorTest()
 
 	logicArray<int,greterInt> testbuffer(a, a + 5, 5, ord);
 
-	logger.log(Logger::INFO, "Su logicArray di interi in circularbuffer di char");
+	logger.log(Logger::INFO, "Su logicArray di interi in logicArray di char");
 	logicArray<char,greterInt> testbuffer1(a, a + 5, 5, ord);
 
 	cout << testbuffer << std::endl;
@@ -115,7 +120,7 @@ void iteratorTest()
 	//assert(testbuffer.get_dimensione() == 5 && testbuffer.get_spazioLibero() == 0);
 	cout << "Size: " << testbuffer.getDimension() << " , spazio libero: " << testbuffer.getFreeSpace() << std::endl;
 
-	logger.log(Logger::INFO, "Su circularbuffer di stringhe");
+	logger.log(Logger::INFO, "Su logicArray di stringhe");
 
 	string s[6] = {
 		"dd",
