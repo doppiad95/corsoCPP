@@ -124,7 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="log.h" />
-    <ClInclude Include="logicArray.h" />
+    <ClInclude Include="sortedarray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

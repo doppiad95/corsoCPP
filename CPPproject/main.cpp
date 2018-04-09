@@ -1,4 +1,4 @@
-#include "logicArray.h"
+#include "sortedarray.h"
 #include <algorithm>
 
 struct greterInt {
@@ -52,7 +52,7 @@ int main()
 }
 void genericTest()
 {
-	logicArray<int,greterInt> logicarray(5);
+	sortedarray<int,greterInt> logicarray(5);
 	try{
 	logicarray.insertData(1);
 	logicarray.insertData(10);
@@ -87,13 +87,13 @@ void iteratorTest()
 	const greterInt ord;
 	Logger logger(Logger::ALL);
 	logger.log(Logger::INFO, "-----Test costruzione e stampa buffer costruito con iteratori");
-	logger.log(Logger::INFO, "Su logicArray di interi");
+	logger.log(Logger::INFO, "Su sortedarray di interi");
 	int a[5] = { 67, 90 ,72, 82, 81 };
 
-	logicArray<int,greterInt> testbuffer(a, a + 5, 5, ord);
+	sortedarray<int,greterInt> testbuffer(a, a + 5, 5, ord);
 
-	logger.log(Logger::INFO, "Su logicArray di interi in logicArray di char");
-	logicArray<char,greterInt> testbuffer1(a, a + 5, 5, ord);
+	logger.log(Logger::INFO, "Su sortedarray di interi in sortedarray di char");
+	sortedarray<char,greterInt> testbuffer1(a, a + 5, 5, ord);
 
 	cout << testbuffer << std::endl;
 	cout << testbuffer1 << std::endl;
@@ -102,17 +102,17 @@ void iteratorTest()
 		std::cout << "Element found in myints: " << *p << '\n';
 	else
 		std::cout << "Element not found in myints\n";
-	logicArray<int, greterInt>::u_const_iterator inizio = testbuffer.u_begin();
-	logicArray<int, greterInt>::u_const_iterator fine = testbuffer.u_end();
-	logicArray<int, greterInt>::u_const_iterator ppp = std::find(inizio,fine , 72);
+	sortedarray<int, greterInt>::u_const_iterator inizio = testbuffer.u_begin();
+	sortedarray<int, greterInt>::u_const_iterator fine = testbuffer.u_end();
+	sortedarray<int, greterInt>::u_const_iterator ppp = std::find(inizio,fine , 72);
 	if (ppp <= testbuffer.u_end())
 		std::cout << "Element found in myints: " << *ppp << '\n';
 	else
 		std::cout << "Element not found in myints\n";
 
-	logicArray<int, greterInt>::const_iterator sinizio = testbuffer.begin();
-	logicArray<int, greterInt>::const_iterator sfine = testbuffer.end();
-	logicArray<int, greterInt>::const_iterator sppp = std::max_element(sinizio, sfine);
+	sortedarray<int, greterInt>::const_iterator sinizio = testbuffer.begin();
+	sortedarray<int, greterInt>::const_iterator sfine = testbuffer.end();
+	sortedarray<int, greterInt>::const_iterator sppp = std::max_element(sinizio, sfine);
 	if (sppp <= testbuffer.end())
 		std::cout << "Element found in myints: " << *sppp << '\n';
 	else
@@ -120,7 +120,7 @@ void iteratorTest()
 	//assert(testbuffer.get_dimensione() == 5 && testbuffer.get_spazioLibero() == 0);
 	cout << "Size: " << testbuffer.getDimension() << " , spazio libero: " << testbuffer.getFreeSpace() << std::endl;
 
-	logger.log(Logger::INFO, "Su logicArray di stringhe");
+	logger.log(Logger::INFO, "Su sortedarray di stringhe");
 
 	string s[6] = {
 		"dd",
@@ -131,18 +131,18 @@ void iteratorTest()
 		"cc"
 	};
 	greaterString gs;
-	logicArray<string,greaterString> testbuffer2(s, s + 6, 6, gs);
+	sortedarray<string,greaterString> testbuffer2(s, s + 6, 6, gs);
 	cout << testbuffer2 << std::endl;
 	//assert(testbuffer2.get_dimensione() == 6 && testbuffer2.get_spazioLibero() == 0);
 	testbuffer2.unsortedPrint();
 	testbuffer2.sortedPrint();
 	cout << "Size: " << testbuffer2.getDimension() << " , spazio libero: " << testbuffer2.getFreeSpace() << std::endl;
 
-	logicArray<string,greaterString>::const_iterator px, pe;
+	sortedarray<string,greaterString>::const_iterator px, pe;
 }
 inline void test_complex() {
 	complex com;
-	logicArray<complex,complex> testbuffer(5);
+	sortedarray<complex,complex> testbuffer(5);
 	Logger logger(Logger::ALL);
 	logger.log(Logger::INFO, "Insertimento dei seguenti numeri complessi (1,1), (1,2), (2,7), (0,0), (5,4)");
 	testbuffer.insertData(complex(1, 1));
@@ -163,17 +163,17 @@ inline void test_complex() {
 void test_inizio_fine() {
 	Logger logger(Logger::ALL);
 	logger.log(Logger::INFO, "----- Test scrittura con const_iterator");
-	logicArray<int,greterInt> testbuffer(5);
+	sortedarray<int,greterInt> testbuffer(5);
 	greterInt g;
 	testbuffer.insertData(44);
 	testbuffer.insertData(61);
 	testbuffer.insertData(91);
 	testbuffer.insertData(11);
 	testbuffer.insertData(411);
-	logicArray<int,greterInt>::const_iterator iw = testbuffer.begin();
+	sortedarray<int,greterInt>::const_iterator iw = testbuffer.begin();
 
-	logicArray<int,greterInt>::const_iterator i = testbuffer.begin();
-	logicArray<int,greterInt>::const_iterator ie = testbuffer.end();
+	sortedarray<int,greterInt>::const_iterator i = testbuffer.begin();
+	sortedarray<int,greterInt>::const_iterator ie = testbuffer.end();
 	cout << std::endl;
 	for (; iw != ie; iw++) {
 		cout << *iw << "-";
@@ -181,8 +181,8 @@ void test_inizio_fine() {
 
 	logger.log(Logger::INFO, " ---- Test lettura/scrittura con iterator");
 
-	logicArray<int, greterInt>::u_const_iterator ui = testbuffer.u_begin();
-	logicArray<int, greterInt>::u_const_iterator uie = testbuffer.u_end();
+	sortedarray<int, greterInt>::u_const_iterator ui = testbuffer.u_begin();
+	sortedarray<int, greterInt>::u_const_iterator uie = testbuffer.u_end();
 	cout << "Unsorted" << std::endl;
 	for (; ui != uie; ui++) {
 		cout << *ui << "-";
@@ -199,7 +199,7 @@ struct equal {
 void test_count() {
 	std::cout << "Test sul metodo test_count()" << std::endl;
 	equal func;
-	logicArray<int,greterInt> a(5);
+	sortedarray<int,greterInt> a(5);
 	a.insertData(2);
 	a.insertData(1);
 	a.insertData(2);
@@ -210,9 +210,9 @@ void test_count() {
 
 }
 void test_iteratori() {
-	logicArray<int, greterInt>::u_const_iterator is;
+	sortedarray<int, greterInt>::u_const_iterator is;
 
-	logicArray<int, greterInt> a(5);
+	sortedarray<int, greterInt> a(5);
 
 	a.insertData(5);
 	a.insertData(1);
@@ -220,11 +220,11 @@ void test_iteratori() {
 	a.insertData(3);
 	a.insertData(4);
 
-	logicArray<int, greterInt>::u_const_iterator ib = a.u_begin();
-	logicArray<int, greterInt>::u_const_iterator ie = a.u_end();
+	sortedarray<int, greterInt>::u_const_iterator ib = a.u_begin();
+	sortedarray<int, greterInt>::u_const_iterator ie = a.u_end();
 
-	logicArray<int, greterInt>::u_const_iterator iw = ib;
-	logicArray<int, greterInt>::u_const_iterator ir = ib;
+	sortedarray<int, greterInt>::u_const_iterator iw = ib;
+	sortedarray<int, greterInt>::u_const_iterator ir = ib;
 
 
 
@@ -243,7 +243,7 @@ void test_iteratori() {
 //8
 
 void test_iteratori2() {
-	logicArray<int, greterInt> a(5);
+	sortedarray<int, greterInt> a(5);
 
 	a.insertData(5);
 	a.insertData(1);
@@ -251,15 +251,15 @@ void test_iteratori2() {
 	a.insertData(3);
 	a.insertData(4);
 
-	logicArray<int, greterInt>::const_iterator ib = a.begin();
-	logicArray<int, greterInt>::const_iterator ie = a.end();
+	sortedarray<int, greterInt>::const_iterator ib = a.begin();
+	sortedarray<int, greterInt>::const_iterator ie = a.end();
 
-	logicArray<int, greterInt>::const_iterator iw = ib;
-	logicArray<int, greterInt>::const_iterator ir = ib;
+	sortedarray<int, greterInt>::const_iterator iw = ib;
+	sortedarray<int, greterInt>::const_iterator ir = ib;
 	++iw;
 	++iw;
 
-	logicArray<int, greterInt>::const_iterator is = iw;
+	sortedarray<int, greterInt>::const_iterator is = iw;
 
 	std::cout << *(iw-2) << std::endl;
 	std::cout << (ib > ie) << std::endl;
@@ -270,7 +270,7 @@ void test_iteratori2() {
 }
 void test_iteratori3()
 {
-	logicArray<int, greterInt> a(5);
+	sortedarray<int, greterInt> a(5);
 
 	a.insertData(5);
 	a.insertData(1);
@@ -278,15 +278,15 @@ void test_iteratori3()
 	a.insertData(3);
 	a.insertData(4);
 
-	logicArray<int, greterInt>::u_const_iterator ib = a.u_begin();
-	logicArray<int, greterInt>::u_const_iterator ie = a.u_end();
+	sortedarray<int, greterInt>::u_const_iterator ib = a.u_begin();
+	sortedarray<int, greterInt>::u_const_iterator ie = a.u_end();
 
-	logicArray<int, greterInt>::u_const_iterator iw = ib;
-	logicArray<int, greterInt>::u_const_iterator ir = ib;
+	sortedarray<int, greterInt>::u_const_iterator iw = ib;
+	sortedarray<int, greterInt>::u_const_iterator ir = ib;
 	++iw;
 	++iw;
 
-	logicArray<int, greterInt>::u_const_iterator is = iw;
+	sortedarray<int, greterInt>::u_const_iterator is = iw;
 
 	std::cout << *(iw - 2) << std::endl;
 	std::cout << (ib > ie) << std::endl;

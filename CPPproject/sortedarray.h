@@ -6,8 +6,8 @@
 #include <stdexcept>
 #include "log.h"
 /**
-@file logicArray.h
-@brief Dichiarazione classe logicArray
+@file sortedarray.h
+@brief Dichiarazione classe sortedarray
 
 **/
 
@@ -18,7 +18,7 @@ La classe contiene due array uno con i dati non ordinati e uno con le posizioni 
 che i dati se letti leggendo sequenzialmente le posizioni dal secondo array risultino ordinati
 **/
 template <typename T, typename F>
-class logicArray
+class sortedarray
 {
 	typedef unsigned int maxDimension;
 	
@@ -40,20 +40,20 @@ protected:
 public:
 	//COSTRUTTORI E DISTRUTTORE
 	/**
-	*	Inizializza un nuovo logicArray di tipo T con dimensione 0
+	*	Inizializza un nuovo sortedarray di tipo T con dimensione 0
 	* 	@brief Costruttore Priamario
 	*
 	**/
-	logicArray() : last_inserted_(0), head_(0), tail_(0), uhead_(0), utail_(0), dimensione_array_(0), logger_(Logger::WARNING), unsorted_data_(0), sorted_data_(0)
+	sortedarray() : last_inserted_(0), head_(0), tail_(0), uhead_(0), utail_(0), dimensione_array_(0), logger_(Logger::WARNING), unsorted_data_(0), sorted_data_(0)
 	{
 	}
 	/**
-	*	Inizializza un nuovo logicArray di tipo T con dimensione size
+	*	Inizializza un nuovo sortedarray di tipo T con dimensione size
 	* 	@brief Costruttore Secondario
 	*	@param dimensione Dimensione dell'array da creare
 	*
 	**/
-	logicArray(const maxDimension dimensione) : last_inserted_(0), head_(0), tail_(0), uhead_(0), utail_(0), dimensione_array_(0), logger_(Logger::WARNING), unsorted_data_(0), sorted_data_(0)
+	sortedarray(const maxDimension dimensione) : last_inserted_(0), head_(0), tail_(0), uhead_(0), utail_(0), dimensione_array_(0), logger_(Logger::WARNING), unsorted_data_(0), sorted_data_(0)
 	{
 		try {
 			dimensione_array_ = dimensione;
@@ -75,10 +75,10 @@ public:
 	/**
 	*	Copy constructor
 	* 	@brief Copy constructor
-	*	@param other logicArray da copiare
+	*	@param other sortedarray da copiare
 	*
 	**/
-	logicArray(const logicArray &other) :last_inserted_(0), head_(0), tail_(0), uhead_(0), utail_(0), dimensione_array_(0), logger_(Logger::WARNING), unsorted_data_(0), sorted_data_(0)
+	sortedarray(const sortedarray &other) :last_inserted_(0), head_(0), tail_(0), uhead_(0), utail_(0), dimensione_array_(0), logger_(Logger::WARNING), unsorted_data_(0), sorted_data_(0)
 	{
 		try {
 			unsorted_data_ = new T[other.dimensione_array_];
@@ -108,7 +108,7 @@ public:
 		}
 	}
 	/**
-	*	costruttore che prende in input la grandezza del logicArray che si vuole creare,
+	*	costruttore che prende in input la grandezza del sortedarray che si vuole creare,
 	*	se la creazione non va a buon fine viene catturata l'eccezione specifica
 	* 	@brief costruttore con dimensione
 	*	@param inizio pointer a inizio array da copiare
@@ -117,7 +117,7 @@ public:
 	*	@param comp funtore di ordinamento
 	**/
 	template <typename IterT>
-	logicArray(IterT inizio, IterT fine, const maxDimension dimensione, F comp) : last_inserted_(0), head_(0), tail_(0)
+	sortedarray(IterT inizio, IterT fine, const maxDimension dimensione, F comp) : last_inserted_(0), head_(0), tail_(0)
 	{
 		dimensione_array_ = dimensione;
 		unsorted_data_ = new T[dimensione];
@@ -143,7 +143,7 @@ public:
 		}
 	}
 	/**@brief distruttore di default */
-	~logicArray()
+	~sortedarray()
 	{
 		if (!dispose())
 			logger_.log(Logger::ERROR, "Impossibile eseguire il dispose delle risorse. Possibili memory leak");
@@ -249,9 +249,9 @@ public:
 		return true;
 	}
 	/**@brief  Metodo ausiliario utilizzato nell'operatore assegnamento
-	 * @param to_swap logicArray da copiare
+	 * @param to_swap sortedarray da copiare
 	 */
-	void swap(logicArray& to_swap)
+	void swap(sortedarray& to_swap)
 	{
 		try {
 			std::swap(to_swap.last_inserted_, this->last_inserted_);
@@ -321,13 +321,13 @@ public:
 
 	//OPERATOR OVERLOADING
 	/**@brief operatore di assegnamento per LogicArray 
-	 * @param other logicArray da assegnare
+	 * @param other sortedarray da assegnare
 	 */
-	logicArray& operator=(const logicArray& other)
+	sortedarray& operator=(const sortedarray& other)
 	{
 		if (this != other)
 		{
-			logicArray tmp(other);
+			sortedarray tmp(other);
 			this->swap(tmp);
 		}
 		return *this;
@@ -524,7 +524,7 @@ public:
 
 	private:
 
-		friend class logicArray;
+		friend class sortedarray;
 		/**@brief costruttore parametrico
 		* @param v pointer a data
 		*/
@@ -676,7 +676,7 @@ public:
 		}
 
 	public:
-		friend class logicArray;
+		friend class sortedarray;
 		/** @brief costruttore di default 
 		* @param v pointer a array di int con le posizioni
 		 */
@@ -716,7 +716,7 @@ Permette di streammare il contenuto di un array in output
 @return Riferimento all'output stream
 **/
 template <typename T,typename F>
-std::ostream& operator<<(std::ostream &os, logicArray<T,F> & cb) {
+std::ostream& operator<<(std::ostream &os, sortedarray<T,F> & cb) {
 	for (int i = 0; i < cb.getLastInserted(); ++i)
 		os << cb[i] << " // ";
 
@@ -736,7 +736,7 @@ Funzione che permette di contare quanti elementi nella struttura dati soddisfino
 
 **/
 template <typename T, typename P,typename F>
-int find_count(const logicArray<T,F> &SA, P func, const T &target) {
+int find_count(const sortedarray<T,F> &SA, P func, const T &target) {
 	int count = 0;
 	for (int i = 0; i<SA.getLastInserted(); i++) {
 		if (func(SA[i], target)) {
