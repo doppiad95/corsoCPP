@@ -5,7 +5,18 @@
 #include <cstddef>
 #include <stdexcept>
 #include "log.h"
+/**
+@file logicArray.h
+@brief Dichiarazione classe logicArray
 
+**/
+
+/**
+@brief Array di tipo T
+
+La classe contiene due array uno con i dati non ordinati e uno con le posizioni in maniera tale
+che i dati se letti leggendo sequenzialmente le posizioni dal secondo array risultino ordinati
+**/
 template <typename T, typename F>
 class logicArray
 {
@@ -100,7 +111,10 @@ public:
 	*	costruttore che prende in input la grandezza del logicArray che si vuole creare,
 	*	se la creazione non va a buon fine viene catturata l'eccezione specifica
 	* 	@brief costruttore con dimensione
-	*
+	*	@param inizio pointer a inizio array da copiare
+	*	@param fine pointer a fine array da copiare
+	*	@param dimensione numero di elementi 
+	*	@param comp funtore di ordinamento
 	**/
 	template <typename IterT>
 	logicArray(IterT inizio, IterT fine, const maxDimension dimensione, F comp) : last_inserted_(0), head_(0), tail_(0)
@@ -179,7 +193,9 @@ public:
 	//-----------------------------
 
 	//METODI E FUNZIONI
-	/**@brief  Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine*/
+	/**@brief  Inserimento di dati nell'array non ordinato e inserimento della posizione nell'array che tiene traccia dell'ordine
+	 * @param data Valore T da inserire nell'array
+	 */
 	bool insertData(const T& data)
 	{
 		if (last_inserted_ == dimensione_array_)
@@ -232,7 +248,9 @@ public:
 		logger_.log(Logger::INFO, "Fine procedura di svuotamento");
 		return true;
 	}
-	/**@brief  Metodo ausiliario utilizzato nell'operatore assegnamento*/
+	/**@brief  Metodo ausiliario utilizzato nell'operatore assegnamento
+	 * @param to_swap logicArray da copiare
+	 */
 	void swap(logicArray& to_swap)
 	{
 		try {
@@ -268,7 +286,9 @@ public:
 		}
 		return true;
 	}
-	/**@brief Shifta a dx di 1 posizione ogni elemento*/
+	/**@brief Shifta a dx di 1 posizione ogni elemento 
+	 * @param position posizione da cui shiftare
+	 */
 	void shiftItem(int position) const
 	{
 		int temp = sorted_data_[getDimension() - 1];
@@ -300,6 +320,9 @@ public:
 	//-----------------------------
 
 	//OPERATOR OVERLOADING
+	/**@brief operatore di assegnamento per LogicArray 
+	 * @param other logicArray da assegnare
+	 */
 	logicArray& operator=(const logicArray& other)
 	{
 		if (this != other)
@@ -309,18 +332,30 @@ public:
 		}
 		return *this;
 	}
+	/**@brief Operatore di accesso indexato ai dati ordinati const 
+	 * @param index posizione a cui accedere
+	 */
 	const T &operator[](const maxDimension index) const
 	{
 		return unsorted_data_[sorted_data_[index]];
 	}
+	/**@brief Operatore di accesso indexato ai dati ordinati 
+	 * @param index posizione a cui accedere
+	 */
 	T &operator[](const maxDimension index)
 	{
 		return unsorted_data_[sorted_data_[index]];
 	}
+	/**@brief Operatore di accesso indexato ai dati non ordinati const 
+	 * @param index posizione a cui accedere
+	 */
 	const T &operator()(const maxDimension index) const
 	{
 		return unsorted_data_[index];
 	}
+	/**@brief Operatore di accesso indexato ai dati non ordinati 
+	 * @param index posizione a cui accedere
+	 */
 	T &operator()(const maxDimension index)
 	{
 		return unsorted_data_[index];
@@ -338,18 +373,24 @@ public:
 		typedef const T*                 pointer;
 		typedef const T&                 reference;
 
-		//4 metodi fondamentali
+		/**@brief Costruttore di default */
 		u_const_iterator() : data(0) {}
 
+		/**@brief copyconstructor 
+		 * @param other iteratore da copiare
+		 */
 		u_const_iterator(const u_const_iterator &other) : data(other.data) {
 
 		}
-
+		/**@brief operatore di assegnamento
+		* @param other iteratore da copiare
+		*/
 		u_const_iterator& operator=(const u_const_iterator &other) {
 			data = other.data;
 			return *this;
 		}
-
+		/**@brief distruttore di default
+		*/
 		~u_const_iterator() {
 			data = 0;
 		}
@@ -366,7 +407,9 @@ public:
 			return data;
 		}
 
-		/**@brief Operatore di accesso random */
+		/**@brief Operatore di accesso random 
+		 * @param index posizione a cui accedere
+		 */
 		reference operator[](const int index) {
 			return data[index];
 		}
@@ -397,32 +440,42 @@ public:
 			return *this;
 		}
 
-		/**@brief Spostamentio in avanti */
+		/**@brief Spostamentio in avanti 
+		 * @param offset posizioni in avanti
+		 */
 		u_const_iterator operator+(int offset) {
 			data += offset;
 			return *this;
 		}
 
-		/**@brief Spostamentio all'indietro */
+		/**@brief Spostamentio all'indietro 
+		 * @param offset posizione all'indietro
+		 */
 		u_const_iterator operator-(int offset) {
 			data -= offset;
 			return *this;
 		}
 
-		/**@brief Spostamentio in avanti della posizione */
+		/**@brief Spostamentio in avanti della posizione 
+		 * @param offset posizioni in avanti
+		 */
 		u_const_iterator& operator+=(int offset) {
 			data += offset;
 			return *this;
 
 		}
 
-		/**@brief Spostamentio all'indietro della posizione */
+		/**@brief Spostamentio all'indietro della posizione 
+		 * @param offset posizioni all'indietro
+		 */
 		u_const_iterator& operator-=(int offset) {
 			data -= offset;
 			return *this;
 		}
 
-		/**@brief Numero di elementi tra due iteratori */
+		/**@brief Numero di elementi tra due iteratori 
+		 * @param other iteratore su cui eseguire la differenza
+		 */
 		difference_type operator-(const u_const_iterator &other) {
 			int count = 0;
 			while (this->data != other.data) {
@@ -432,27 +485,39 @@ public:
 
 			return count;
 		}
-
+		/**@brief operatore di confronto
+		* @param other iteratore da confrontare
+		*/
 		bool operator==(const u_const_iterator &other) const {
 			return this->data == other.data;
 		}
-
+		/**@brief operatore di non uguaglianza
+		* @param other iteratore da confrontare
+		*/
 		bool operator!=(const u_const_iterator &other) const {
 			return this->data != other.data;
 		}
-
+		/**@brief operatore di maggiore
+		* @param other iteratore da confrontare
+		*/
 		bool operator>(const u_const_iterator &other) const {
 			return this->data > other.data;
 		}
-
+		/**@brief operatore di maggiore uguale
+		* @param other iteratore da confrontare
+		*/
 		bool operator>=(const u_const_iterator &other) const {
 			return this->data >= other.data;
 		}
-
+		/**@brief operatore di minore
+		* @param other iteratore da confrontare
+		*/
 		bool operator<(const u_const_iterator &other) const {
 			return this->data < other.data;
 		}
-
+		/**@brief operatore di minore uguale
+		* @param other iteratore da confrontare
+		*/
 		bool operator<=(const u_const_iterator &other) const {
 			return this->data <= other.data;
 		}
@@ -460,16 +525,21 @@ public:
 	private:
 
 		friend class logicArray;
-
+		/**@brief costruttore parametrico
+		* @param v pointer a data
+		*/
 		u_const_iterator(const T *v) : data(v) {
 
 		}
-	}; //u_const_iterator
-
+	}; 
+	//u_const_iterator
+	   /**@brief ritorna un iteratore che punta alla testa
+	   */
 	u_const_iterator u_begin() const {
 		return u_const_iterator(uhead_);
 	}
-
+	/**@brief ritorna un iteratore che punta alla coda
+	*/
 	u_const_iterator u_end() const {
 		return u_const_iterator(utail_+1);
 	}
@@ -507,7 +577,7 @@ public:
 			const int index = *posizionamento;
 			return this->data[index];
 		}
-		// Ritorna il puntatore al dato riferito dall'iteratore
+		/** @brief Ritorna il puntatore al dato riferito dall'iteratore */
 		pointer operator->() const {
 			return posizionamento;
 		}
@@ -552,14 +622,21 @@ public:
 			posizionamento = posizionamento + index;
 			return *this;
 		}
-		/** @brief confronto */
+		/**@brief operatore di confronto
+		* @param other iteratore da confrontare
+		*/
 		bool operator==(const const_iterator &other) const {
 			return posizionamento == other.posizionamento;
 		}
-		/** @brief diversità */
+		/**@brief operatore di diversità
+		* @param other iteratore da confrontare
+		*/
 		bool operator!=(const const_iterator &other) const {
 			return posizionamento != other.posizionamento;
 		}
+		/**@brief Numero di elementi tra due iteratori
+		* @param other iteratore su cui eseguire la differenza
+		*/
 		difference_type operator-(const u_const_iterator &other) {
 			int count = 0;
 			while (this->posizionamento != other.posizionamento) {
@@ -569,18 +646,30 @@ public:
 
 			return count;
 		}
+		/**@brief operatore di minore
+		* @param lhs iteratore da confrontare
+		*/
 		bool operator< (const const_iterator& lhs)
 		{
 			return this->posizionamento > lhs.posizionamento;
 		};
+		/**@brief operatore di maggiore
+		* @param lhs iteratore da confrontare
+		*/
 		bool operator> (const const_iterator& lhs)
 		{
 			return this->posizionamento < lhs.posizionamento;
 		};
+		/**@brief operatore di minore uguale
+		* @param lhs iteratore da confrontare
+		*/
 		bool operator<=(const const_iterator& lhs)
 		{
 			return !(this->posizionamento > lhs.posizionamento);
 		}
+		/**@brief operatore di maggiore uguale
+		* @param lhs iteratore da confrontare
+		*/
 		bool operator>=(const const_iterator& lhs)
 		{
 			return !(this->posizionamento < lhs.posizionamento);
@@ -588,12 +677,17 @@ public:
 
 	public:
 		friend class logicArray;
-		/** @brief costruttore di default */
+		/** @brief costruttore di default 
+		* @param v pointer a array di int con le posizioni
+		 */
 		const_iterator(const T *v) : posizionamento(v) {}
-		/**@brief costruttore che prende in input l'array delle posizioni e l'array di dati non ordinati */
+		/**@brief costruttore che prende in input l'array delle posizioni e l'array di dati non ordinati 
+		 * @param v pointer a array di int con le posizioni
+		 * @param d pointer ai dati disordinati
+		 */
 		const_iterator(const int *v, const T* d) : posizionamento(v), data(d) {
 		}
-		/** @brief costruttore con info su testa e coda */
+
 	};
 	/**
 	*Ritorna un const iterator che punta a testa e ha info su coda e testa
@@ -611,6 +705,16 @@ public:
 	//END ITERATORI
 };
 
+/**
+@brief Operatore di stream
+
+Permette di streammare il contenuto di un array in output
+
+@param os stream di output
+@param cb array da utilizzare
+
+@return Riferimento all'output stream
+**/
 template <typename T,typename F>
 std::ostream& operator<<(std::ostream &os, logicArray<T,F> & cb) {
 	for (int i = 0; i < cb.getLastInserted(); ++i)
@@ -619,6 +723,18 @@ std::ostream& operator<<(std::ostream &os, logicArray<T,F> & cb) {
 	return os;
 }
 
+/**
+@brief find_count
+
+Funzione che permette di contare quanti elementi nella struttura dati soddisfino un predicato binario
+
+@param SA sorted_array da valutare
+@param func predicato binario
+@param target valore di tipo T con il quale fare il confronto
+
+@return count Numero di elementi che, confrontati con target, rispettano il predicato func
+
+**/
 template <typename T, typename P,typename F>
 int find_count(const logicArray<T,F> &SA, P func, const T &target) {
 	int count = 0;
