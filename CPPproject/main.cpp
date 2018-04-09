@@ -208,6 +208,18 @@ void test_count() {
 
 	std::cout << find_count(a, func, 2) << std::endl;
 
+	complex com;
+	sortedarray<complex, complex> testbuffer(5);
+	Logger logger(Logger::ALL);
+	logger.log(Logger::INFO, "Insertimento dei seguenti numeri complessi (1,1), (1,2), (2,7), (0,0), (5,4)");
+	testbuffer.insertData(complex(1, 1));
+	testbuffer.insertData(complex(1, 2));
+	testbuffer.insertData(complex(2, 7));
+	testbuffer.insertData(complex(0, 0));
+	testbuffer.insertData(complex(5, 4));
+
+	std::cout << find_count(testbuffer, com, complex(2,7)) << std::endl;
+
 }
 void test_iteratori() {
 	sortedarray<int, greterInt>::u_const_iterator is;

@@ -1,5 +1,5 @@
 main.exe: main.o
-	g++ main.o -o main.exe
+	gcc main.o -o main.exe
 
 main.o: main.cpp
-	g++ -g -c main.cpp
+	gcc -g -c main.cpp
