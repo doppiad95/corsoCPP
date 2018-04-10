@@ -628,6 +628,22 @@ public:
 		bool operator==(const const_iterator &other) const {
 			return posizionamento == other.posizionamento;
 		}
+		/**@brief Spostamentio in avanti della posizione
+		* @param offset posizioni in avanti
+		*/
+		const_iterator& operator+=(int offset) {
+			posizionamento += offset;
+			return *this;
+
+		}
+
+		/**@brief Spostamentio all'indietro della posizione
+		* @param offset posizioni all'indietro
+		*/
+		const_iterator& operator-=(int offset) {
+			posizionamento -= offset;
+			return *this;
+		}
 		/**@brief operatore di diversità
 		* @param other iteratore da confrontare
 		*/
@@ -675,7 +691,7 @@ public:
 			return !(this->posizionamento < lhs.posizionamento);
 		}
 
-	public:
+	private:
 		friend class sortedarray;
 		/** @brief costruttore di default 
 		* @param v pointer a array di int con le posizioni
